@@ -15,4 +15,24 @@ module.exports = {
     },
   },
   plugins: [require('daisyui')],
+  daisyui: {
+    themes: [
+      {
+        mytheme: {
+          ...require("daisyui/src/theming/themes")["light"],
+          "primary": "#1EA1F1", // Primary color (example)
+          "background-color": "#F1F5F9", // Setting the background color to slate-100
+          ".btn-twitter": {
+            "background-color": "#FFFFFF",
+            "border-color": "#1EA1F1",
+          },
+          ".btn-twitter:hover": {
+            "background-color": "#FFFFFF",
+            "border-color": "#1C96E1",
+          },
+        },
+      },
+    ],
+  },
+
 };
