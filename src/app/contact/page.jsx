@@ -23,7 +23,7 @@ const ContactSection = () => {
     console.log("newContactInfo", newContactUser);
 
     try {
-      const resp = await fetch('http://localhost:3000/contact/api/contactuser', {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/contact/api/contactuser`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

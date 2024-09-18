@@ -4,9 +4,6 @@ import Link from 'next/link';
 import React from 'react';
 
 
-
-
-
 const Services = async () => {
   const {services} =await useServices();
   // console.log(services.services);

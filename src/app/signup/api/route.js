@@ -1,5 +1,6 @@
 import connectDB from "@/lib/connectDB";
 import bcrypt from "bcrypt";
+import { NextResponse } from "next/server";
 
 export const POST = async(request)=>{
    const newUser = await request.json();
@@ -9,13 +10,13 @@ export const POST = async(request)=>{
     const exist =await userCollection.findOne({email:newUser.email});
     if(exist)
     {
-        return Response.json({message:"user exist"}, {status:304}) 
+        return NextResponse.json({message:"user exist"}, {status:304}) 
     }
     const hashPasssword = bcrypt.hashSync(newUser.password, 14);
     const resp = await userCollection.insertOne({...newUser,password:hashPasssword});
-    return Response.json({message:"user created"}, {status:200})
+    return NextResponse.json({message:"user created"}, {status:200})
    }catch(err){
-    return Response.json({message:"something went wrong"}, {status:500})
+    return NextResponse.json({message:"something went wrong"}, {status:500})
    }
 }
 

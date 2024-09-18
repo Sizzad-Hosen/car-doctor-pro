@@ -16,7 +16,7 @@ const ProfilePage = ({ params }) => {
   // Load user data from the API
   const load = async () => {
     try {
-      const res = await fetch(`http://localhost:3000/profile/api/${session?.user?.email}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/api/${session?.user?.email}`);
       if (!res.ok) throw new Error("Failed to fetch user data");
       const data = await res.json();
       setUserData(data.user);
@@ -63,7 +63,7 @@ const ProfilePage = ({ params }) => {
     };
 
     try {
-      const resp = await fetch(`http://localhost:3000/profile/api/${userData?._id}`, {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/api/${userData?._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

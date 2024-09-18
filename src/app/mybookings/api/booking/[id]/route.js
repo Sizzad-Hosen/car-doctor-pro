@@ -1,5 +1,6 @@
 import connectDB from "@/lib/connectDB";
 import { ObjectId } from "mongodb";
+import { NextResponse } from "next/server";
 
 export const DELETE = async (request, { params }) => {
   try {
@@ -11,13 +12,13 @@ export const DELETE = async (request, { params }) => {
     const deleteResult = await bookingCollection.deleteOne({ _id: new ObjectId(id) });
 
     if (deleteResult.deletedCount === 1) {
-      return new Response(JSON.stringify({ message: "Successfully deleted", deleteResult }), { status: 200 });
+      return new NextResponse(JSON.stringify({ message: "Successfully deleted", deleteResult }), { status: 200 });
     } else {
-      return new Response(JSON.stringify({ error: "Booking not found" }), { status: 404 });
+      return new NextResponse(JSON.stringify({ error: "Booking not found" }), { status: 404 });
     }
   } catch (error) {
     console.error('Error deleting booking:', error);
-    return new Response(JSON.stringify({ error: 'Failed to delete booking' }), { status: 500 });
+    return new NextResponse(JSON.stringify({ error: 'Failed to delete booking' }), { status: 500 });
   }
 };
 
@@ -47,11 +48,11 @@ export const PATCH = async (request, { params }) => {
 
     
 
-    return new Response(JSON.stringify({ message: "Successfully updated", data: resp }), { status: 200 });
+    return new NextResponse(JSON.stringify({ message: "Successfully updated", data: resp }), { status: 200 });
 
   } catch (error) {
     console.error('Error updating booking:', error);
-    return new Response(JSON.stringify({ error: 'Failed to update booking' }), { status: 500 });
+    return new NextResponse(JSON.stringify({ error: 'Failed to update booking' }), { status: 500 });
   }
 }
 
@@ -67,7 +68,7 @@ export const GET = async (request, {params})=> {
   
     const resp = await bookingCollection.findOne({_id : new ObjectId(params.id)})
     
-    return Response.json({message: "data found",data: resp});
+    return NextResponse.json({message: "data found",data: resp});
 
   } catch (error) {
     console.error('Error fetching service:', error);

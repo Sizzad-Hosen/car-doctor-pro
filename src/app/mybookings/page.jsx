@@ -14,7 +14,7 @@ const MybookingPage = () => {
   const loadData = async () => {
     if (session?.user?.email) {
       try {
-        const resp = await fetch(`http://localhost:3000/mybookings/api/${session.user.email}`);
+        const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mybookings/api/${session.user.email}`);
         const data = await resp.json();
         console.log(data);
         setBookings(data?.myBookings || []);
@@ -40,7 +40,7 @@ const MybookingPage = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          const resp = await fetch(`http://localhost:3000/mybookings/api/booking/${id}`, {
+          const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mybookings/api/booking/${id}`, {
             method: "DELETE",
           });
 

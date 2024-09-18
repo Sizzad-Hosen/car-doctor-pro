@@ -11,7 +11,7 @@ const UpdatedPage = ({ params }) => {
   const loadData = async () => {
     try {
       // ei api kaj get kore data ana defaultvalue te set kora usestate diywe
-      const resp = await fetch(`http://localhost:3000/mybookings/api/booking/${params.id}`);
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mybookings/api/booking/${params.id}`);
       if (!resp.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -45,7 +45,7 @@ const UpdatedPage = ({ params }) => {
     try {
 
       // updated api
-      const resp = await fetch(`http://localhost:3000/mybookings/api/booking/${params.id}`, {
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/mybookings/api/booking/${params.id}`, {
         method: 'PATCH',
         headers: {
           "Content-Type": "application/json",

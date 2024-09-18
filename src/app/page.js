@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic"
 import HomeComponent from "@/components/Home/Home";
 
 export default function Home() {

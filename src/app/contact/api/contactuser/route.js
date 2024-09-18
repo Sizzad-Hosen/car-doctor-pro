@@ -1,4 +1,5 @@
 import connectDB from "@/lib/connectDB";
+import { NextResponse } from "next/server";
 
 export const POST = async (request) => {
   try {
@@ -11,14 +12,14 @@ export const POST = async (request) => {
  
     const contactUser = await contactCollection.insertOne(newContactUser);
   
-    return new Response(JSON.stringify({ message: "New contact user comment successfully" }), {
+    return new NextResponse(JSON.stringify({ message: "New contact user comment successfully" }), {
       status: 201, 
     });
 
   } catch (error) {
     console.error('Error fetching service:', error);
     
-    return new Response(JSON.stringify({ error: 'Failed to add contact user' }), {
+    return new NextResponse(JSON.stringify({ error: 'Failed to add contact user' }), {
       status: 500,
     });
   }

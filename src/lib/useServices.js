@@ -1,5 +1,5 @@
 export const useServices = async ()=>{
-    const res = await fetch('http://localhost:3000/services/api/getall');
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/services/api/getall`);
     const services = await res.json();
     console.log('string is passs',services);
   
@@ -10,7 +10,7 @@ export const useServices = async ()=>{
   
   
 export const useServicesDetails = async (id)=>{
-    const res = await fetch(`http://localhost:3000/services/api/${id}`);
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/services/api/${id}`);
     const service = await res.json();
     console.log('string is passs',service);
   

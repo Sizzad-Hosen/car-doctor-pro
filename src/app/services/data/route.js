@@ -1,5 +1,6 @@
 import connectDB from "@/lib/connectDB";
 import services from "@/lib/services";
+import { NextResponse } from "next/server";
 
 export const GET = async () => {
   try {
@@ -13,14 +14,14 @@ export const GET = async () => {
     const result = await servicesCollection.insertMany(services);
 
    
-    return new Response(JSON.stringify({ message: "Seed added successfully", insertedCount: result.insertedCount }), {
+    return new NextResponse(JSON.stringify({ message: "Seed added successfully", insertedCount: result.insertedCount }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
 
   } catch (error) {
     console.error('Error inserting services:', error);
-    return new Response(JSON.stringify({ error: 'Failed to insert services' }), {
+    return new NextResponse(JSON.stringify({ error: 'Failed to insert services' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },
     });

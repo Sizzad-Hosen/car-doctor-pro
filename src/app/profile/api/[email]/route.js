@@ -40,11 +40,10 @@ export const GET = async (request, { params }) => {
 export const PUT = async (request) => {
   try {
     const updatedUser = await request.json();
-    const { _id, name, email, image } = updatedUser; // Destructure the updated user data
+    const { _id, name, email, image } = updatedUser; 
 
     const db = await connectDB();
 
-    // Check if the _id is valid and is a valid ObjectId
     if (!_id || !ObjectId.isValid(_id)) {
       return new Response(
         JSON.stringify({ message: 'Invalid user ID' }),
@@ -52,26 +51,25 @@ export const PUT = async (request) => {
       );
     }
 
-    // Convert _id to ObjectId for MongoDB operations
     const objectId = new ObjectId(_id);
 
-    // Prepare the update document
+   
     const updateDoc = {
       $set: {
-        name: name || '', // Provide default empty string if undefined
-        email: email || '', // Provide default empty string if undefined
-        image: image || '', // Provide default empty string if undefined
+        name: name || '', 
+        email: email || '', 
+        image: image || '', 
       },
     };
 
-    // Update the user's profile in the database
+
     const result = await db.collection('users').updateOne(
       { _id: objectId },
       updateDoc,
-      { upsert: true } // If no document is found, create a new one
+      { upsert: true } 
     );
 
-    // Check if the update was successful
+   
     if (result.modifiedCount === 1 || result.upsertedCount === 1) {
       const user = await db.collection('users').findOne({ _id: objectId });
 

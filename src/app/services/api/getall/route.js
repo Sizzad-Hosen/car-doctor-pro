@@ -1,6 +1,7 @@
 
 
 import connectDB from "@/lib/connectDB";
+import { NextResponse } from "next/server";
 
 export const GET = async ()=> {
   try {
@@ -9,7 +10,7 @@ export const GET = async ()=> {
   
     const services = await servicesCollection.find().toArray();
     
-    return Response.json({ services });
+    return NextResponse.json({ services });
 
   } catch (error) {
     console.error('Error fetching services:', error);

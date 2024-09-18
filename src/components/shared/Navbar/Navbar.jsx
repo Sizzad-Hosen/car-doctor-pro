@@ -24,7 +24,7 @@ const Navbar = () => {
   // Load user data from the API
   const load = async () => {
     try {
-      const resp = await fetch(`http://localhost:3000/profile/api/${session?.user?.email}`);
+      const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/profile/api/${session?.user?.email}`);
       if (!resp.ok) {
         throw new Error(`Error: ${resp.statusText}`);
       }
