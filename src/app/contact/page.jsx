@@ -1,4 +1,4 @@
-"use client";
+'use client'; // Add this line at the top
 
 import React from 'react';
 import Swal from 'sweetalert2';
@@ -75,7 +75,7 @@ const ContactSection = () => {
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <h3 className="text-2xl font-semibold mb-4">Get In Touch</h3>
               <p className="mb-6 text-gray-600">
-                Feel free to reach out to us with any questions or concerns. We're here to help with all your car care needs.
+                Feel free to reach out to us with any questions or concerns We are here to help with all your car care needs
               </p>
               <ul className="text-gray-700">
                 <li className="mb-4">

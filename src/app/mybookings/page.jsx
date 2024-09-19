@@ -112,7 +112,7 @@ const MybookingPage = () => {
                         <Image
                           width={50}
                           height={50}
-                          src={booking?.serviceImg || '/default-image.jpg'} // Add a default image if `booking.img` is missing
+                          src={booking?.serviceImg || '/default-image.jpg'} 
                           alt="Service Image"
                         />
                       </div>

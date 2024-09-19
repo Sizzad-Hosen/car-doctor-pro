@@ -1,190 +1,141 @@
 "use client";
-import Swal from 'sweetalert2'
-import { useServicesDetails } from '@/lib/useServices';
-import { useSession } from 'next-auth/react';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
 
-const CheckoutPage = ({ params }) => {
-  const { data } = useSession();
+import Image from "next/image";
+import React, { useEffect, useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
+
+const Checkout = ({ params }) => {
+  const { id } = params;
   const [service, setService] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const loadData = async () => {
-      if (params.id) {
-        try {
-          setLoading(true);
-          const response = await useServicesDetails(params.id);
-          setService(response.service);
-        } catch (error) {
-          console.error('Error fetching service details:', error);
-          setError('Failed to load service details');
-        } finally {
-          setLoading(false);
-        }
+    const fetchServiceDetails = async () => {
+      try {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/services/api/${id}`);
+        const data = await res.json();
+        setService(data.service); 
+      } catch (error) {
+        console.error('Error fetching service details:', error);
+      } finally {
+        setLoading(false);
       }
     };
 
-    loadData();
-  }, [params.id]);
+    fetchServiceDetails();
+  }, [id]);
 
-  const handleBooking = async (e) => {
-    e.preventDefault();
-    const newBooking = {
-      name: data?.user?.name,
-      email: data?.user?.email,
-      date: e.target.date.value,
-      phone: e.target.phone.value,
-      address: e.target.address.value,
-      servicePrice :service?.price,
-      serviceId: service?._id,
-      serviceTitle: service?.title,
-      serviceImg:service?.img,
+  if (loading) {
+    return <p>Loading service details...</p>;
+  }
 
+  if (!service) {
+    return <p>No service found.</p>;
+  }
+
+  const { title, price, img, _id } = service;
+
+  const handleBooking = async (event) => {
+    event.preventDefault();
+    const newBooking = { 
+      email: event.target.email.value,
+      name: event.target.name.value,
+      address: event.target.address.value,
+      phone: event.target.phone.value,
+      date: event.target.date.value,
+      serviceTitle: title,
+      serviceImg:img,
+      serviceID: _id,
+      servicePrice: price,
     };
-    console.log('New Booking:', newBooking);
+
     try {
       const resp = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/checkout/api/new-booking`, {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify(newBooking),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
-      console.log(resp);
 
-
+      const response = await resp.json();
       if (resp.ok) {
-        Swal.fire({
-            position: "top",
-            icon: "success",
-            title: "Sucessfully added to the bookmark",
-            showConfirmButton: false,
-            timer: 1500
-          });
+        toast.success(response?.message || "Order confirmed successfully!");
+      } else {
+        toast.error(response?.message || "Failed to confirm the order.");
       }
-
+      event.target.reset();
     } catch (error) {
       console.error('Error creating booking:', error);
-      alert('Failed to confirm booking');
+      toast.error("Failed to create booking.");
     }
-
-
-
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center min-h-screen bg-slate-100">
-        <div className="text-center">
-          <div className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full border-blue-500 border-t-transparent" role="status">
-            <span className="sr-only">Loading...</span>
-          </div>
-          <p className="mt-4 text-gray-600">Loading...</p>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
-    return (
-      <div className="text-center min-h-screen bg-slate-100 flex items-center justify-center">
-        <p className="text-red-500">{error}</p>
-      </div>
-    );
-  }
-
   return (
-    <div className="text-gray-900 bg-slate-100 mx-auto container p-4">
-      <div className="carousel w-full h-[600px] mb-6">
-        <div id="slide1" className="carousel-item relative w-full">
-          <Image
-            width={800}
-            height={100}
-            alt="Service Image"
-            src={service?.img || '/default-image.jpg'}
-            className="w-full rounded-xl"
-          />
+    <div className="container mx-auto">
+      <ToastContainer />
+      <div className="relative h-72">
+        <Image
+          className="absolute h-72 w-full left-0 top-0 object-cover"
+          src={img}
+          alt="service"
+          width={1920}
+          height={1080}
+          style={{ width: "90vw" }}
+        />
+        <div className="absolute h-full left-0 top-0 flex items-center justify-center bg-gradient-to-r from-[#151515] to-[rgba(21, 21, 21, 0)]">
+          <h1 className="text-white text-3xl font-bold flex justify-center items-center ml-8">
+            Checkout {title}
+          </h1>
         </div>
       </div>
-
-      <form onSubmit={handleBooking} className="bg-white p-6 rounded-lg shadow-md w-full mx-auto">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-4">
-          <div className="mb-4">
-            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              defaultValue={data?.user?.name || ''}
-              className="mt-1 block w-full py-3 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
+      <div className="my-12 bg-slate-300 p-12">
+        <form onSubmit={handleBooking}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Name</span>
+              </label>
+              <input type="text" name="name" className="input input-bordered" required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Date</span>
+              </label>
+              <input type="date" name="date" className="input input-bordered" required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Email</span>
+              </label>
+              <input type="email" name="email" className="input input-bordered" required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Due amount</span>
+              </label>
+              <input type="text" name="price" defaultValue={price} readOnly className="input input-bordered" />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Phone</span>
+              </label>
+              <input type="tel" name="phone" placeholder="Your Phone" className="input input-bordered" required />
+            </div>
+            <div className="form-control">
+              <label className="label">
+                <span className="label-text">Present Address</span>
+              </label>
+              <input type="text" name="address" placeholder="Your Address" className="input input-bordered" required />
+            </div>
           </div>
-          <div className="mb-4">
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              defaultValue={data?.user?.email || ''}
-              className="mt-1 block w-full py-3 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
+          <div className="form-control mt-6">
+            <input className="btn btn-primary btn-block" type="submit" value="Order Confirm" />
           </div>
-          <div className="mb-4">
-            <label htmlFor="address" className="block text-sm font-medium text-gray-700">Address</label>
-            <textarea
-              id="address"
-              name="address"
-              rows="3"
-              className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone</label>
-            <input
-              type="tel"
-              id="phone"
-              name="phone"
-              className="mt-1 py-3 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700">Date</label>
-            <input
-              type="date"
-              id="date"
-              name="date"
-              className="mt-1 block w-full py-2 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              required
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="duePrice" className="block text-sm font-medium text-gray-700">Due Price</label>
-            <input
-              type="text"
-              id="duePrice"
-              name="duePrice"
-              defaultValue={service?.price || ''}
-              className="mt-1 block w-full py-3 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
-              readOnly
-            />
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 mt-4"
-        >
-          Confirm Order
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
 
-export default CheckoutPage;
+export default Checkout;

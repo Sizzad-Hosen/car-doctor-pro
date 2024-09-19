@@ -5,7 +5,7 @@ const BlogAndReviewSection = () => {
   return (
     <section className="bg-gray-100 py-12">
       <div className="container mx-auto px-4">
-        <h2 className="text-3xl font-semibold text-center text-blue-600 mb-8">Our Blog & Reviews</h2>
+        <h2 className="text-3xl font-semibold text-center text-blue-600 mb-8">Our Blog Reviews</h2>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {/* Blog Section */}
@@ -32,7 +32,7 @@ const BlogAndReviewSection = () => {
               <div className="bg-white p-6 rounded-lg shadow-lg">
                 <h4 className="text-xl font-semibold text-blue-600 mb-2">Understanding Car Diagnostics</h4>
                 <p className="text-gray-700">
-                  Car diagnostics can seem complicated, but they're essential for identifying potential issues early on. Here's what you need to know...
+                  Car diagnostics can seem complicated, but they&apos;re essential for identifying potential issues early on. Here what you need to know...
                 </p>
                 <a href="#" className="text-blue-500 hover:underline mt-4 inline-block">Read more</a>
               </div>
@@ -46,7 +46,7 @@ const BlogAndReviewSection = () => {
               {/* Review 1 */}
               <div className="bg-white p-6 rounded-lg shadow-lg">
                 <p className="text-gray-700">
-                  "Car Doctor Pro provided exceptional service! My car has never run better. Highly recommend them!"
+                  Car Doctor Pro provided exceptional service! My car has never run better. Highly recommend them
                 </p>
                 <div className="mt-4 flex items-center">
                   <Image
@@ -65,7 +65,7 @@ const BlogAndReviewSection = () => {
               {/* Review 2 */}
               <div className="bg-white p-6 rounded-lg shadow-lg">
                 <p className="text-gray-700">
-                  "The team at Car Doctor Pro is amazing! They diagnosed and fixed my car's issue in no time."
+                 The team at Car Doctor Pro is amazing! They diagnosed and fixed my car issue in no time
                 </p>
                 <div className="mt-4 flex items-center">
                   <Image
@@ -84,7 +84,7 @@ const BlogAndReviewSection = () => {
               {/* Review 3 */}
               <div className="bg-white p-6 rounded-lg shadow-lg">
                 <p className="text-gray-700">
-                  "Great service and friendly staff! I trust Car Doctor Pro with all my car needs."
+                  Great service and friendly staff! I trust Car Doctor Pro with all my car needs
                 </p>
                 <div className="mt-4 flex items-center">
                   <Image
