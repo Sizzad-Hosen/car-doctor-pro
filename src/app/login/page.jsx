@@ -1,13 +1,14 @@
 "use client";
-
-import React, { Suspense } from 'react';
+import dynamic from 'next/dynamic';
+import React from 'react';
 import login from "../../../public/assets/images/login/login.svg";
 import Image from 'next/image';
 import Link from 'next/link';
 import Swal from 'sweetalert2';
 import { signIn, useSession } from "next-auth/react";
-import SocialLogin from '@/components/shared/SocialLogin';
 import { useRouter, useSearchParams } from 'next/navigation';
+
+const SocialLogin = dynamic(() => import('@/components/shared/SocialLogin'), { ssr: false });
 
 const Login = () => {
   const router = useRouter();
@@ -25,6 +26,7 @@ const Login = () => {
       email,
       password,
       redirect: false,
+      callbackUrl: path ? path : "/",
     });
 
     if (result?.error) {
@@ -45,7 +47,7 @@ const Login = () => {
       });
     }
   };
-
+  if (status === 'loading') return null;
   if (status === "authenticated") {
     router.push(path || '/');
   }
@@ -86,10 +88,4 @@ const Login = () => {
   );
 };
 
-const LoginWithSuspense = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <Login />
-  </Suspense>
-);
-
-export default LoginWithSuspense;
+export default Login;

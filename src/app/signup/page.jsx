@@ -1,11 +1,12 @@
 "use client";
-
-import React, { Suspense } from 'react';
-import login from "../../../public/assets/images/login/login.svg";
+import dynamic from 'next/dynamic';
+import React from 'react';
+import Swal from 'sweetalert2';
+import SocialLogin from '@/components/shared/SocialLogin';
 import Image from 'next/image';
 import Link from 'next/link';
-import SocialLogin from '@/components/shared/SocialLogin';
-import Swal from 'sweetalert2';
+import login from "../../../public/assets/images/login/login.svg";
+
 
 const Signup = () => {
   const handleSignup = async (e) => {
@@ -14,7 +15,6 @@ const Signup = () => {
     const name = from.name.value;
     const email = from.email.value;
     const password = from.password.value;
-    const newUser = { name, email, password };
 
     try {
       const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/signup/api`, {
@@ -22,7 +22,7 @@ const Signup = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify({ name, email, password }),
       });
 
       if (!res.ok) {
@@ -43,7 +43,7 @@ const Signup = () => {
         timer: 1500,
       });
 
-      from.reset();
+      from.reset(); // Clear the form fields after successful signup
 
     } catch (err) {
       console.error('Error submitting form:', err);
@@ -82,6 +82,9 @@ const Signup = () => {
                   <span className="label-text">Password</span>
                 </label>
                 <input type="password" placeholder="password" name='password' className="input input-bordered" required />
+                <label className="label">
+                  <a href="#" className="label-text-alt link link-hover">Forgot password?</a>
+                </label>
               </div>
               <div className="form-control mt-6">
                 <button className="btn btn-primary">Sign up</button>
@@ -97,10 +100,4 @@ const Signup = () => {
   );
 };
 
-const SignupWithSuspense = () => (
-  <Suspense fallback={<div>Loading...</div>}>
-    <Signup />
-  </Suspense>
-);
-
-export default SignupWithSuspense;
+export default Signup;
